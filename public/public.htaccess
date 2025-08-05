@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Oculta .php na URL mesmo em subpastas
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+?)/?$ $1.php [L]
+
+# Redireciona de /arquivo.php para /arquivo (opcional)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+(.+)\.php\sHTTP/
+RewriteRule ^(.+)\.php$ /$1 [R=301,L]

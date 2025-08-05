@@ -1,0 +1,11 @@
+{
+    "name": "edi/api-analiticsdata",
+    "autoload": {
+        "psr-4": {
+            "App\\": "core/"
+        }
+    },
+    "require": {
+        "analitics/analitics-commons": "^1.0"
+    }
+}

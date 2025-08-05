@@ -1,0 +1,59 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "e37ec5863cbac3c667869cca6349a5be",
+    "packages": [
+        {
+            "name": "analitics/analitics-commons",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anlisticsData/analitics-commons.git",
+                "reference": "2036bfefa1626f2d193be2e2ca6bad52555d9472"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/anlisticsData/analitics-commons/zipball/2036bfefa1626f2d193be2e2ca6bad52555d9472",
+                "reference": "2036bfefa1626f2d193be2e2ca6bad52555d9472",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AnaliticsCommons\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Edilson Claudino da Silva",
+                    "email": "edilsonclaudinosilva@gmai.com"
+                }
+            ],
+            "description": "Classe para tratar requests e uploads de arquivos",
+            "support": {
+                "issues": "https://github.com/anlisticsData/analitics-commons/issues",
+                "source": "https://github.com/anlisticsData/analitics-commons/tree/v1.0.1"
+            },
+            "time": "2025-05-21T01:42:28+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
+}

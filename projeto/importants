@@ -3,7 +3,7 @@
  #git config --global user.email "analisticsdata.company@gmail.com"
 ##git config --global user.name "analisticsdatacompany" 
 #ssh -T git@github.com  # Ou o endereço correspondente ao seu repositório (GitLab, Bitbucket, etc.)
-
+# docker exec -it web /bin/bash 
 
 #docker 
 docker cp backup.sql mysql-container:/backup.sql

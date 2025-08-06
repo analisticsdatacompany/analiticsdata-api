@@ -15,11 +15,21 @@ Http::cors();
 
 $userId =1;
 
-if (AclDao::userHasPermission($userId,'apagar_post')) {
+try{
+if (AclDao::userHasAllPermissions(1, ['*'])->isTrue()) {
     echo "Usuário pode acessar usuários!";
+    print_r(["<pre>",AclDao::getUserPermissions($userId)]);
 } else {
     echo "Acesso negado.";
 }
+
+}catch(Exception $e){
+    print_r(["<pre>",$e]);
+}
+ 
+
+
+
 
 
  /*

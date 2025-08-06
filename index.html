@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Still App - Cadastro</title>
+    <title>DataFlow API - Processamento de Dados Avançado</title>
     <style>
         * {
             margin: 0;
@@ -12,758 +12,705 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f3460 0%, #16537e 50%, #1e6091 100%);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .phone-container {
-            max-width: 375px;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(15, 52, 96, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 1rem 0;
+            position: fixed;
             width: 100%;
-            background: #fff;
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            margin: 20px;
-            max-height: 90vh;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid rgba(64, 224, 208, 0.3);
         }
 
-        .status-bar {
-            background: #666;
-            color: white;
-            padding: 8px 20px;
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 14px;
-            font-weight: 500;
         }
 
-        .status-left {
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #40e0d0;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
         }
 
-        .status-right {
+        .logo::before {
+            content: '📊';
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
             display: flex;
-            align-items: center;
-            gap: 5px;
+            list-style: none;
+            gap: 2rem;
         }
 
-        .form-container {
-            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
-            padding: 30px 25px 20px;
-            max-height: calc(90vh - 40px);
-            overflow-y: auto;
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
 
-        .header-section {
+        .nav-links a:hover {
+            color: #40e0d0;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.9), rgba(30, 96, 145, 0.9));
+            padding: 150px 0 100px;
             text-align: center;
-            margin-bottom: 30px;
+            color: white;
+            position: relative;
+            overflow: hidden;
         }
 
-        .welcome-title {
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="1" height="1" fill="rgba(64,224,208,0.1)" x="20" y="20"/><rect width="1" height="1" fill="rgba(64,224,208,0.1)" x="80" y="40"/><rect width="1" height="1" fill="rgba(64,224,208,0.1)" x="40" y="70"/></svg>') repeat;
+            animation: dataFlow 15s infinite linear;
+            z-index: 0;
+        }
+
+        @keyframes dataFlow {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(-100px) translateY(-100px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #40e0d0, #00ced1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 8px;
         }
 
-        .welcome-subtitle {
-            color: #666;
-            font-size: 14px;
-            line-height: 1.4;
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px 20px;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            font-size: 16px;
-            background: white;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        .form-input:focus {
-            border-color: #4facfe;
-            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .form-input::placeholder {
-            color: #adb5bd;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #6c757d;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .form-input.with-icon {
-            padding-left: 45px;
-        }
-
-        .password-container {
-            position: relative;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
+        .cta-button {
+            background: linear-gradient(45deg, #40e0d0, #00ced1);
+            color: #0f3460;
+            padding: 15px 30px;
             border: none;
-            color: #6c757d;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
             cursor: pointer;
-            padding: 5px;
-            border-radius: 4px;
-            transition: color 0.3s ease;
-            z-index: 2;
-        }
-
-        .password-toggle:hover {
-            color: #4facfe;
-        }
-
-        .date-input {
-            position: relative;
-        }
-
-        .date-input input[type="date"] {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-        }
-
-        .date-input input[type="date"]::-webkit-calendar-picker-indicator {
-            background: transparent;
-            bottom: 0;
-            color: transparent;
-            cursor: pointer;
-            height: auto;
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: auto;
-        }
-
-        .gender-section {
-            margin-bottom: 20px;
-        }
-
-        .gender-options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
-        }
-
-        .radio-option:hover {
-            background-color: #f8f9fa;
-        }
-
-        .custom-radio {
-            position: relative;
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-
-        .custom-radio input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .radio-checkmark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 20px;
-            width: 20px;
-            background: white;
-            border: 2px solid #e9ecef;
-            border-radius: 50%;
             transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 20px rgba(64, 224, 208, 0.4);
         }
 
-        .custom-radio input:checked ~ .radio-checkmark {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            border-color: #4facfe;
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(64, 224, 208, 0.6);
         }
 
-        .radio-checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
-            top: 3px;
-            left: 3px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
+        .services {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            position: relative;
+        }
+
+        .services h2 {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: #0f3460;
+        }
+
+        .services-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 4rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
             background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            border-left: 5px solid #40e0d0;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(15, 52, 96, 0.1);
         }
 
-        .custom-radio input:checked ~ .radio-checkmark:after {
-            display: block;
-        }
-
-        .radio-label {
-            color: #333;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .location-info {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 14px;
-            line-height: 1.4;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .location-icon {
-            font-size: 18px;
-        }
-
-        .submit-btn {
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(64, 224, 208, 0.05), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
         }
 
-        .submit-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(79, 172, 254, 0.4);
+        .service-card:hover::before {
+            animation: shimmer 1s ease-in-out;
         }
 
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
-        .submit-btn.loading {
-            color: transparent;
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(15, 52, 96, 0.2);
+            border-left-color: #00ced1;
+        }
+
+        .service-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .service-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: #0f3460;
+        }
+
+        .service-card p {
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .service-features {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .service-features li {
+            color: #40e0d0;
+            margin: 0.5rem 0;
             position: relative;
+            padding-left: 1.5rem;
         }
 
-        .submit-btn.loading::after {
-            content: "";
+        .service-features li::before {
+            content: '✓';
             position: absolute;
-            width: 20px;
-            height: 20px;
-            top: 50%;
-            left: 50%;
-            margin-left: -10px;
-            margin-top: -10px;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .stats {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #0f3460, #16537e);
+            color: white;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-item {
+            padding: 1.5rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #40e0d0;
+            margin-bottom: 0.5rem;
+            counter-reset: number;
+            animation: countUp 2s ease-out;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .features {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 4rem;
+            color: #0f3460;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-item {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
             border: 2px solid transparent;
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
         }
 
-        .bottom-bar {
-            height: 5px;
-            background: #333;
-            margin: 15px auto 0;
-            width: 134px;
-            border-radius: 3px;
+        .feature-item:hover {
+            border-color: #40e0d0;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(64, 224, 208, 0.1);
         }
 
-        /* Error states */
-        .form-input.error {
-            border-color: #dc3545;
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        .feature-item h3 {
+            color: #0f3460;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
         }
 
-        .error-message {
-            color: #dc3545;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
+        .pricing {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
         }
 
-        .form-input.error + .error-message {
-            display: block;
+        .pricing h2 {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: #0f3460;
         }
 
-        .success-message {
-            position: fixed;
-            top: 20px;
+        .pricing-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 4rem;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+        }
+
+        .pricing-card.featured {
+            border-color: #40e0d0;
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured::before {
+            content: 'MAIS POPULAR';
+            position: absolute;
+            top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            background: #40e0d0;
             color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            box-shadow: 0 8px 20px rgba(17,153,142,0.3);
-            z-index: 1000;
-            animation: slideDown 0.3s ease;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #0f3460;
+            margin: 1rem 0;
         }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
+        .price-unit {
+            font-size: 1rem;
+            color: #64748b;
         }
 
-        /* Accessibility */
-        .form-input:focus,
-        .submit-btn:focus,
-        .custom-radio input:focus ~ .radio-checkmark {
-            outline: 2px solid #4facfe;
-            outline-offset: 2px;
+        footer {
+            background: #0f3460;
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
 
-        /* Dark mode */
-        @media (prefers-color-scheme: dark) {
-            .phone-container {
-                background: #1a1a1a;
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
             }
             
-            .form-container {
-                background: linear-gradient(180deg, #1a1a1a 0%, #0d1117 100%);
+            .nav-links {
+                display: none;
             }
             
-            .form-label {
-                color: #e6edf3;
+            .services-grid {
+                grid-template-columns: 1fr;
             }
-            
-            .form-input {
-                background: #21262d;
-                border-color: #30363d;
-                color: #e6edf3;
-            }
-            
-            .form-input:focus {
-                border-color: #4facfe;
-                background: #21262d;
-            }
-            
-            .radio-checkmark {
-                background: #21262d;
-                border-color: #30363d;
-            }
-            
-            .radio-label {
-                color: #e6edf3;
-            }
-            
-            .radio-option:hover {
-                background-color: #21262d;
+
+            .service-card {
+                padding: 2rem;
             }
         }
 
-        /* Responsive */
-        @media (max-height: 700px) {
-            .form-container {
-                padding: 20px 25px 15px;
-            }
-            
-            .form-group {
-                margin-bottom: 15px;
-            }
-            
-            .header-section {
-                margin-bottom: 20px;
-            }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <div class="phone-container">
-        <!-- Status Bar -->
-        <div class="status-bar">
-            <div class="status-left">
-                <span>6:25</span>
-                <span>🔋</span>
-                <span>📶</span>
-            </div>
-            <div class="status-right">
-                <span>📶</span>
-                <span>📶</span>
-                <span>🔋</span>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">DataFlow API</a>
+            <ul class="nav-links">
+                <li><a href="#services">Serviços</a></li>
+                <li><a href="#features">Recursos</a></li>
+                <li><a href="#pricing">Preços</a></li>
+                <li><a href="#docs">Documentação</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Processamento de Dados em Escala</h1>
+            <p>Transforme seus dados em insights valiosos com nossa API de processamento avançado</p>
+            <a href="#services" class="cta-button pulse">Começar Agora</a>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">10TB+</div>
+                    <div class="stat-label">Dados processados diariamente</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">99.9%</div>
+                    <div class="stat-label">Uptime garantido</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">&lt;100ms</div>
+                    <div class="stat-label">Latência média</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Empresas confiam em nós</div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <!-- Form Container -->
-        <div class="form-container">
-            <!-- Header -->
-            <div class="header-section">
-                <h1 class="welcome-title">Bem-vindo(a) ao Still App</h1>
-                <p class="welcome-subtitle">Preencha suas informações abaixo antes de continuar</p>
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Serviços de Processamento</h2>
+            <p class="services-subtitle">Soluções completas para todas as suas necessidades de dados</p>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <span class="service-icon">🔄</span>
+                    <h3>ETL/ELT em Tempo Real</h3>
+                    <p>Pipeline de dados robusto para extração, transformação e carregamento de dados de múltiplas fontes com processamento em tempo real.</p>
+                    <ul class="service-features">
+                        <li>Conectores para 100+ fontes de dados</li>
+                        <li>Transformações customizáveis</li>
+                        <li>Processamento de streaming</li>
+                        <li>Monitoramento em tempo real</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card fade-in">
+                    <span class="service-icon">📈</span>
+                    <h3>Analytics e Agregações</h3>
+                    <p>Processamento analítico avançado com capacidades de agregação, sumarização e cálculos estatísticos complexos em grandes volumes de dados.</p>
+                    <ul class="service-features">
+                        <li>OLAP multidimensional</li>
+                        <li>Agregações pré-computadas</li>
+                        <li>Análise estatística avançada</li>
+                        <li>Dashboards interativos</li>
+                    </ul>
+                </div>
+
+                <div class="service-card fade-in">
+                    <span class="service-icon">🧠</span>
+                    <h3>Machine Learning Pipeline</h3>
+                    <p>Treine, deploe e monitore modelos de machine learning com pipelines automatizados e infraestrutura escalável para ML.</p>
+                    <ul class="service-features">
+                        <li>AutoML para modelos rápidos</li>
+                        <li>Feature engineering automatizado</li>
+                        <li>Model deployment sem servidor</li>
+                        <li>A/B testing de modelos</li>
+                    </ul>
+                </div>
+
+                <div class="service-card fade-in">
+                    <span class="service-icon">🔍</span>
+                    <h3>Busca e Indexação</h3>
+                    <p>Sistema de indexação distribuído para busca em tempo real em petabytes de dados estruturados e não-estruturados.</p>
+                    <ul class="service-features">
+                        <li>Indexação full-text</li>
+                        <li>Busca semântica com IA</li>
+                        <li>Faceted search</li>
+                        <li>Relevância personalizada</li>
+                    </ul>
+                </div>
+
+                <div class="service-card fade-in">
+                    <span class="service-icon">🗄️</span>
+                    <h3>Data Lake & Warehouse</h3>
+                    <p>Armazenamento e processamento de dados em arquiteturas híbridas, combinando flexibilidade de data lakes com performance de warehouses.</p>
+                    <ul class="service-features">
+                        <li>Schema-on-read flexibility</li>
+                        <li>Compressão inteligente</li>
+                        <li>Particionamento automático</li>
+                        <li>Governança de dados</li>
+                    </ul>
+                </div>
+
+                <div class="service-card fade-in">
+                    <span class="service-icon">🔒</span>
+                    <h3>Data Quality & Governance</h3>
+                    <p>Ferramentas avançadas para garantir qualidade, linhagem e governança de dados com compliance automático e auditoria completa.</p>
+                    <ul class="service-features">
+                        <li>Validação automática de qualidade</li>
+                        <li>Data lineage tracking</li>
+                        <li>GDPR compliance</li>
+                        <li>Masking e anonimização</li>
+                    </ul>
+                </div>
             </div>
-
-            <!-- Registration Form -->
-            <form id="registrationForm" novalidate>
-                <!-- Address Number -->
-                <div class="form-group">
-                    <label for="addressNumber" class="form-label">Número do local</label>
-                    <div style="position: relative;">
-                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                        </svg>
-                        <input 
-                            type="text" 
-                            id="addressNumber" 
-                            class="form-input with-icon" 
-                            placeholder="Digite o número do endereço"
-                            required
-                        >
-                        <div class="error-message">Por favor, insira o número do endereço.</div>
-                    </div>
-                </div>
-
-                <!-- First Name -->
-                <div class="form-group">
-                    <label for="firstName" class="form-label">Nome</label>
-                    <div style="position: relative;">
-                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                        </svg>
-                        <input 
-                            type="text" 
-                            id="firstName" 
-                            class="form-input with-icon" 
-                            placeholder="Digite seu nome"
-                            required
-                        >
-                        <div class="error-message">Por favor, insira seu nome.</div>
-                    </div>
-                </div>
-
-                <!-- Last Name -->
-                <div class="form-group">
-                    <label for="lastName" class="form-label">Sobrenome</label>
-                    <div style="position: relative;">
-                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A3.01 3.01 0 0 0 17.05 6H16c-.8 0-1.54.37-2.01.96l-2.51 3.16A1.5 1.5 0 0 0 13.65 12l2.84-3.6c.2-.25.51-.4.85-.4h.66c.34 0 .65.15.85.4L20.35 12a1.5 1.5 0 0 0 2.17-1.88L19.01 6.96A3.01 3.01 0 0 0 16.05 6H16c-.8 0-1.54.37-2.01.96l-2.51 3.16A1.5 1.5 0 0 0 13.65 12l2.84-3.6c.2-.25.51-.4.85-.4h.66z"/>
-                        </svg>
-                        <input 
-                            type="text" 
-                            id="lastName" 
-                            class="form-input with-icon" 
-                            placeholder="Digite seu sobrenome"
-                            required
-                        >
-                        <div class="error-message">Por favor, insira seu sobrenome.</div>
-                    </div>
-                </div>
-
-                <!-- Birth Date -->
-                <div class="form-group">
-                    <label for="birthDate" class="form-label">Data de aniversário</label>
-                    <div class="date-input" style="position: relative;">
-                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
-                        </svg>
-                        <input 
-                            type="date" 
-                            id="birthDate" 
-                            class="form-input with-icon" 
-                            required
-                        >
-                        <div class="error-message">Por favor, selecione sua data de nascimento.</div>
-                    </div>
-                </div>
-
-                <!-- Gender Selection -->
-                <div class="gender-section">
-                    <label class="form-label">Gênero</label>
-                    <div class="gender-options">
-                        <label class="radio-option">
-                            <div class="custom-radio">
-                                <input type="radio" name="gender" value="masculino">
-                                <span class="radio-checkmark"></span>
-                            </div>
-                            <span class="radio-label">Masculino</span>
-                        </label>
-                        
-                        <label class="radio-option">
-                            <div class="custom-radio">
-                                <input type="radio" name="gender" value="feminino">
-                                <span class="radio-checkmark"></span>
-                            </div>
-                            <span class="radio-label">Feminino</span>
-                        </label>
-                        
-                        <label class="radio-option">
-                            <div class="custom-radio">
-                                <input type="radio" name="gender" value="nao-informar" checked>
-                                <span class="radio-checkmark"></span>
-                            </div>
-                            <span class="radio-label">Não Informar</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Email -->
-                <div class="form-group">
-                    <label for="email" class="form-label">Email</label>
-                    <div style="position: relative;">
-                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                        </svg>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            class="form-input with-icon" 
-                            placeholder="Digite seu e-mail"
-                            required
-                        >
-                        <div class="error-message">Por favor, insira um e-mail válido.</div>
-                    </div>
-                </div>
-
-                <!-- Password -->
-                <div class="form-group">
-                    <label for="password" class="form-label">Senha</label>
-                    <div class="password-container" style="position: relative;">
-                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-                        </svg>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            class="form-input with-icon" 
-                            placeholder="Digite sua senha"
-                            required
-                            minlength="6"
-                        >
-                        <button 
-                            type="button" 
-                            class="password-toggle" 
-                            onclick="togglePassword('password')"
-                            aria-label="Mostrar/ocultar senha"
-                        >
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-                            </svg>
-                        </button>
-                        <div class="error-message">A senha deve ter pelo menos 6 caracteres.</div>
-                    </div>
-                </div>
-
-                <!-- Phone -->
-                <div class="form-group">
-                    <label for="phone" class="form-label">Telefone</label>
-                    <div style="position: relative;">
-                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-                        </svg>
-                        <input 
-                            type="tel" 
-                            id="phone" 
-                            class="form-input with-icon" 
-                            placeholder="Digite seu telefone"
-                            required
-                        >
-                        <div class="error-message">Por favor, insira um telefone válido.</div>
-                    </div>
-                </div>
-
-                <!-- Location Info -->
-                <div class="location-info">
-                    <div class="location-icon">📍</div>
-                    <div>
-                        <strong>MS-316, Chapadão do Sul - MS, 79560-000, Brasil</strong><br>
-                        Chapadão do Sul, Mato Grosso do Sul - Brasil
-                    </div>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    Finalizar Cadastro
-                </button>
-            </form>
-
-            <div class="bottom-bar"></div>
         </div>
-    </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Recursos Técnicos Avançados</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>⚡ Processamento Paralelo</h3>
+                    <p>Distributed computing com Apache Spark e Kubernetes para processamento massivamente paralelo</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🔄 Auto-Scaling</h3>
+                    <p>Escalabilidade automática baseada na carga de trabalho, otimizando custos e performance</p>
+                </div>
+                <div class="feature-item">
+                    <h3>📊 SQL Avançado</h3>
+                    <p>Suporte completo a SQL:2016 com window functions, CTEs e analytical functions</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🔌 APIs RESTful</h3>
+                    <p>Interface REST completa com rate limiting, versionamento e documentação OpenAPI</p>
+                </div>
+                <div class="feature-item">
+                    <h3>📡 Streaming</h3>
+                    <p>Processamento de eventos em tempo real com Apache Kafka e WebSockets</p>
+                </div>
+                <div class="feature-item">
+                    <h3>🛡️ Segurança Enterprise</h3>
+                    <p>Criptografia em trânsito e repouso, RBAC, SSO e compliance SOC 2</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2>Planos de Processamento</h2>
+            <p class="pricing-subtitle">Escolha o plano ideal para o volume de dados da sua empresa</p>
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">R$ 299<span class="price-unit">/mês</span></div>
+                    <p>Até 100GB de dados processados</p>
+                    <p>10 pipelines simultâneos</p>
+                    <p>APIs básicas</p>
+                    <p>Suporte por email</p>
+                    <p>SLA 99%</p>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <h3>Professional</h3>
+                    <div class="price">R$ 899<span class="price-unit">/mês</span></div>
+                    <p>Até 1TB de dados processados</p>
+                    <p>Pipelines ilimitados</p>
+                    <p>Machine Learning incluído</p>
+                    <p>Suporte 24/7</p>
+                    <p>SLA 99.9%</p>
+                    <p>Dashboards personalizados</p>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">Personalizado</div>
+                    <p>Volume ilimitado de dados</p>
+                    <p>Infraestrutura dedicada</p>
+                    <p>Suporte técnico dedicado</p>
+                    <p>SLA 99.99%</p>
+                    <p>Integrações customizadas</p>
+                    <p>Treinamento da equipe</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>DataFlow API</h3>
+                    <p>Transformando dados em inteligência de negócios desde 2020</p>
+                </div>
+                <div>
+                    <h4>Recursos</h4>
+                    <p>Documentação</p>
+                    <p>SDKs</p>
+                    <p>Status da API</p>
+                </div>
+                <div>
+                    <h4>Suporte</h4>
+                    <p>Central de Ajuda</p>
+                    <p>Contato</p>
+                    <p>Comunidade</p>
+                </div>
+            </div>
+            <p>&copy; 2024 DataFlow API. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
     <script>
-        // Form validation and submission
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const submitBtn = document.getElementById('submitBtn');
-            
-            // Reset previous errors
-            document.querySelectorAll('.form-input').forEach(input => {
-                input.classList.remove('error');
+        // Animação suave para scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
             });
-            
-            let hasErrors = false;
-            
-            // Validate all required fields
-            const requiredFields = ['addressNumber', 'firstName', 'lastName', 'birthDate', 'email', 'password', 'phone'];
-            
-            requiredFields.forEach(fieldName => {
-                const field = document.getElementById(fieldName);
-                if (!field.value.trim()) {
-                    field.classList.add('error');
-                    hasErrors = true;
-                }
-            });
-            
-            // Validate email format
-            const email = document.getElementById('email');
-            if (email.value && !isValidEmail(email.value)) {
-                email.classList.add('error');
-                hasErrors = true;
-            }
-            
-            // Validate password length
-            const password = document.getElementById('password');
-            if (password.value && password.value.length < 6) {
-                password.classList.add('error');
-                hasErrors = true;
-            }
-            
-            // Validate birth date (must be at least 13 years old)
-            const birthDate = document.getElementById('birthDate');
-            if (birthDate.value && !isValidAge(birthDate.value)) {
-                birthDate.classList.add('error');
-                hasErrors = true;
-                showMessage('Você deve ter pelo menos 13 anos para se cadastrar.', 'error');
-            }
-            
-            if (hasErrors) {
-                return;
-            }
-            
-            // Show loading state
-            submitBtn.classList.add('loading');
-            submitBtn.disabled = true;
-            
-            // Simulate registration process
-            setTimeout(() => {
-                submitBtn.classList.remove('loading');
-                submitBtn.disabled = false;
-                
-                // Get form data
-                const userData = {
-                    addressNumber: formData.get('addressNumber'),
-                    firstName: formData.get('firstName'),
-                    lastName: formData.get('lastName'),
-                    birthDate: formData.get('birthDate'),
-                    gender: formData.get('gender'),
-                    email: formData.get('email'),
-                    phone: formData.get('phone')
-                };
-                
-                console.log('User registration data:', userData);
-                
-                showMessage('Cadastro realizado com sucesso!', 'success');
-                
-                // Here you would typically redirect to login or main app
-                setTimeout(() => {
-                    console.log('Redirecting to main app...');
-                }, 1500);
-                
-            }, 2500);
         });
 
-        // Email validation
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
+        // Animação de contadores
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = counter.textContent;
+                const numericValue = parseInt(target.replace(/[^\d]/g, ''));
+                if (numericValue) {
+                    let current = 0;
+                    const increment = numericValue / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= numericValue) {
+                            current = numericValue;
+                            clearInterval(timer);
+                        }
+                        counter.textContent = target.replace(/\d+/, Math.floor(current));
+                    }, 40);
+                }
+            });
         }
 
-        // Age validation (at least 13 years old)
-        function isValidAge(birthDate) {
-            const today = new Date();
-            const birth = new Date(birthDate);
-            const age = today.getFullYear() - birth.getFullYear();
-            const monthDiff = today.getMonth() - birth.getMonth();
-            
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-                age--;
-            }
-            
-            return age >= 13;
-        }
+        // Trigger animação quando a seção stats for visível
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
 
-        // Password toggle functionality
-        function togglePassword(inputId) {
-            const passwordInput = document.getElementById(inputId);
-            const toggleBtn = passwordInput.nextElementSibling;
-            const icon = toggleBtn.querySelector('svg path');
+        observer.observe(document.querySelector('.stats'));
+
+        // Efeito de hover nos cards
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.borderLeftWidth = '8px';
+            });
             
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.setAttribute('d', 'M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66
+            card.addEventListener('mouseleave', function() {
+                this.style.borderLeftWidth = '5px';
+            });
+        });
+    </script>
+</body>
+</html>

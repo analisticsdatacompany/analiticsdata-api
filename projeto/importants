@@ -4,6 +4,11 @@
 ##git config --global user.name "analisticsdatacompany" 
 #ssh -T git@github.com  # Ou o endereço correspondente ao seu repositório (GitLab, Bitbucket, etc.)
 # docker exec -it web /bin/bash 
+#cd "C:\Users\edi\Documents\ProjetosAnaliticsDatas\git"
+#bash windows   cd "C:\web\www\analiticsdata-api"
+
+
+
 
 #docker 
 docker cp backup.sql mysql-container:/backup.sql
@@ -18,8 +23,7 @@ cat analiticsdata_2025-08-05_18-59-36.sql | docker exec -imysql_ sh -c 'mysql -u
 type analiticsdata_2025-08-05_18-59-36.sql | docker exec -i mysql_ mysql -u root -p"root" analiticsdata
 
 
-#cd "C:\Users\edi\Documents\ProjetosAnaliticsDatas\git"
-#bash windows   cd "C:\web\www\analiticsdata-api"
+
 
 
 

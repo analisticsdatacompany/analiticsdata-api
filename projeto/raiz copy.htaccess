@@ -1,0 +1,7 @@
+RewriteEngine On
+
+# Evita loop de redirecionamento se já estiver na public
+RewriteCond %{REQUEST_URI} !^/api-analiticsdata/public/
+
+# Redireciona tudo para /public/
+RewriteRule ^(.*)$ /api-analiticsdata/public/$1 [L,R=301]

@@ -19,10 +19,8 @@ try {
     $request = new AuthRequest(Http::all());
     $use = UserDao::authenticate($request->email, $request->password);
     if(is_null($use)) throw new Exception("Usuario ou Senhas Invalidas",400);
-    
     $token = Jwt::encode(["id" => $use->id, "email" => $use->email, "unique" => uniqid()], $config['appkey']);
     TokenDao::create($token, $use->id);
-
     $data = [
         "id" => $use->id,
         "name" => $use->user_name,

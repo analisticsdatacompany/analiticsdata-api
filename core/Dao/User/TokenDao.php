@@ -40,7 +40,7 @@ class TokenDao
         }
     }
 
-   // Localizar um token por seu valor
+    // Localizar um token por seu valor
     public static function findByUserToken(string $userId): ?array
     {
         try {
@@ -68,7 +68,7 @@ class TokenDao
     {
         try {
             $conn = self::conn();
-            $query = 'SELECT id, token, fk_user, expired, state FROM tokens WHERE token = :token LIMIT 1';
+            $query = 'SELECT id, token, fk_user, expired FROM tokens WHERE  deleted is null and token = :token LIMIT 1';
             $stmt = $conn->prepare($query);
             $stmt->bindParam(':token', $token, PDO::PARAM_STR);
             $stmt->execute();
@@ -82,22 +82,34 @@ class TokenDao
             throw new SqlException($e);
         }
     }
-
-    // Atualizar o token de um usuário (se necessário)
-    public static function updateToken(int $id, string $newToken): bool
+    public static function updateToken(string $token): bool
     {
         try {
-            $conn = self::conn();
-            $query = 'UPDATE tokens SET token = :new_token WHERE id = :id';
-            $stmt = $conn->prepare($query);
-            $stmt->bindParam(':new_token', $newToken, PDO::PARAM_STR);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            // Cria o novo objeto DateTime com 1 dia à frente
+            $newExpirationDate = new \DateTime('+1 day');
 
+            // Formata a data para 'Y-m-d H:i:s' (ex: 2025-08-07 12:00:00)
+            $formattedExpirationDate = $newExpirationDate->format('Y-m-d H:i:s');
+
+            // Conecta ao banco de dados
+            $conn = self::conn();
+
+            // SQL para atualizar a data de expiração do token
+            $query = 'UPDATE tokens SET expired = :new_expiration WHERE token = :token';
+            $stmt = $conn->prepare($query);
+
+            // Faz o bind dos parâmetros
+            $stmt->bindParam(':new_expiration', $formattedExpirationDate, PDO::PARAM_STR); // Agora é uma string formatada
+            $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+
+            // Executa a query
             return $stmt->execute();
         } catch (Exception $e) {
+            // Caso ocorra um erro, lança a exceção personalizada
             throw new SqlException($e);
         }
     }
+
 
     // Finalizar o token, ou seja, alterar seu status para 0 se expirado
     public static function finalizeExpiredToken(): bool

@@ -10,9 +10,9 @@ class PasswordHash
 {
     private function __construct() {}
     private function __clone() {}
-    public static function Create($password)
+    public static function Create($password,$appkey="123")
     {
-        return password_hash($password, PASSWORD_DEFAULT);
+        return password_hash($password, $appkey);
     }
 
     public static function Verify($password, $passwordHash)

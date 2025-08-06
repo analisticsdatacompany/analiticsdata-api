@@ -21,7 +21,7 @@ class UserDao
 
 
     // Função de autenticação
-    public static function authenticate(string $email, string $password):UserEntity
+    public static function authenticate(string $email, string $password)
     {
 
         try {
@@ -42,6 +42,8 @@ class UserDao
                     return new UserEntity($user);
                 }
             }
+            
+            return null;
         } catch (Exception $e) {
             throw new  SqlException($e);
         }

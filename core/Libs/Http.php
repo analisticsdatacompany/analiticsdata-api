@@ -54,7 +54,7 @@ class Http
             if($value){
               
                 foreach($value as $_index => $_value){
-                    $_buffer[strtoupper($_index)] = $_value;
+                    $_buffer[strtolower($_index)] = $_value;
                 }
                
             }

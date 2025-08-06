@@ -14,8 +14,8 @@ class AuthRequest implements IRequests
     {
         if (!is_null($values) && is_array($values)) {
             foreach ($this->rows as $index => $row) {
-                if (isset($values[strtoupper($row)])) {
-                    $this->$row = $values[strtoupper($row)];
+                if (isset($values[strtolower($row)])) {
+                    $this->$row = $values[strtolower($row)];
                 }
             }
         }

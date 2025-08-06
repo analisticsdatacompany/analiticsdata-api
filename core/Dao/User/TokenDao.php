@@ -112,12 +112,13 @@ class TokenDao
 
 
     // Finalizar o token, ou seja, alterar seu status para 0 se expirado
-    public static function finalizeExpiredToken(): bool
+    public static function finalizeExpiredToken($token): bool
     {
         try {
             $conn = self::conn();
-            $query = 'UPDATE tokens SET state = 0 WHERE expired < NOW() AND state = 1';
+            $query = 'UPDATE tokens SET deleted=now() WHERE token=:token ';
             $stmt = $conn->prepare($query);
+            $stmt->bindParam(':token', $token, PDO::PARAM_STR);
 
             return $stmt->execute();
         } catch (Exception $e) {

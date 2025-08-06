@@ -2,6 +2,23 @@
 #analisticsdata.company@gmail.com
 
 
+
+#docker 
+docker cp backup.sql mysql-container:/backup.sql
+docker exec -i mysql-container sh -c 'exec mysql -u root -p"$MYSQL_ROOT_PASSWORD" your_database' < backup.sql
+
+cat backup.sql | docker exec -i mysql-container sh -c 'mysql -u root -p"$MYSQL_ROOT_PASSWORD" your_database'
+
+#linux
+cat analiticsdata_2025-08-05_18-59-36.sql | docker exec -imysql_ sh -c 'mysql -u root -p"root" analiticsdata'
+
+#window
+type analiticsdata_2025-08-05_18-59-36.sql | docker exec -i mysql_ mysql -u root -p"root" analiticsdata
+
+
+
+#bash windows   cd "C:\web\www\analiticsdata-api"
+
  #git config --global user.email "analisticsdata.company@gmail.com"
 
 

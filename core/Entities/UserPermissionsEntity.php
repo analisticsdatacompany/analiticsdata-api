@@ -8,8 +8,6 @@ class UserPermissionsEntity{
     public $id;
     public $acl;
     public $description;
-
-
     public function __construct($values=null)
     {
         

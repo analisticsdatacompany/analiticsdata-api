@@ -4,7 +4,7 @@ namespace App\Libs;
 
 use Exception;
 
-define("PASSWORD_DEFAULT","AAAA22125325");
+//define("PASSWORD_DEFAULT","AAAA22125325");
 
 class PasswordHash
 {

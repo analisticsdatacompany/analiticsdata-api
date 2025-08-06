@@ -1,30 +1,33 @@
 <?php
+
 use App\Dao\DB;
-use App\Dao\Qr\QrDao;
-use App\Dao\Acl\AclDao;
-use AnaliticsCommons\Http;
-use App\Libs\ContentValues;
 use App\Libs\Json;
+use App\Dao\Qr\QrDao;
 use App\Libs\Response;
+use App\Dao\Acl\AclDao;
+use App\Dao\User\UserDao;
+use AnaliticsCommons\Http;
+use App\Libs\PasswordHash;
+use App\Libs\ContentValues;
 use App\Libs\StringBuilder;
 
-require_once __DIR__."./../vendor/autoload.php";
+require_once __DIR__ . "./../vendor/autoload.php";
 
 Http::cors();
 
 
-$userId =1;
+$userId = 1;
+echo "<pre>";
+try {
+    if (AclDao::userHasAllPermissions(1, ['*'])->isTrue()) {
+        // print_r(["<pre>",AclDao::getUserPermissions($userId)]);
 
-try{
-if (AclDao::userHasAllPermissions(1, ['*'])->isTrue()) {
-    echo "Usuário pode acessar usuários!";
-    print_r(["<pre>",AclDao::getUserPermissions($userId)]);
-} else {
-    echo "Acesso negado.";
-}
-
-}catch(Exception $e){
-    print_r(["<pre>",$e]);
+        print_r([UserDao::authenticate("admin@example.com", "1")]);
+    } else {
+        echo "Acesso negado.";
+    }
+} catch (Exception $e) {
+    print_r(["<pre>", $e]);
 }
  
 
@@ -94,5 +97,3 @@ $l->add(9);
 Response::json($l->toString());
 
 */
-
-

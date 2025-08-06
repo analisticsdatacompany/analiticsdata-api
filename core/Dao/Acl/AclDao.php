@@ -1,8 +1,5 @@
 <?php
-
-
 namespace App\Dao\Acl;
-
 use PDO;
 use Exception;
 use App\Dao\DB;
@@ -122,7 +119,7 @@ class AclDao
      */
     public static function getUserPermissions(int $userId): array
     {
-        try {   
+        try {
             $stmt = self::conn()->prepare("
             SELECT a.acl,a.description,a.id,a.acl,g.name,g.description
             FROM users u
@@ -138,8 +135,8 @@ class AclDao
             // Obtendo as permissões (acl) como um array
             $permissions = [];
 
-            foreach($stmt->fetchAll(PDO::FETCH_ASSOC) as $row){
-                array_push($permissions,new UserPermissionsEntity($row));
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                array_push($permissions, new UserPermissionsEntity($row));
             }
 
             // Verifica se o usuário tem permissões
